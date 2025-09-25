@@ -13,25 +13,27 @@ else:
     print("⚠️ No GPU detected, using CPU.")
 
 
-# --- 2. دوال تحميل النماذج (مع إضافة النموذج الجديد) ---
+# --- 2. دوال تحميل النماذج (تم التحديث لتحميلها من Hugging Face Hub) ---
 @st.cache_resource
 def load_gender_model():
-    print(f"⏳ Loading Gender Model...")
-    return pipeline("text-classification", model="./models/gender_classifier_final", device=DEVICE)
+    print(f"⏳ Loading Gender Model from Hugging Face Hub...")
+    # ✨ التغيير هنا ✨
+    return pipeline("text-classification", model="TheMohanad1/marbert-arabic-gender-classifier", device=DEVICE)
 
 @st.cache_resource
 def load_sentiment_model():
-    print(f"⏳ Loading Sentiment Model...")
-    return pipeline("text-classification", model="./models/sentiment_analyzer_final", device=DEVICE)
+    print(f"⏳ Loading Sentiment Model from Hugging Face Hub...")
+    # ✨ التغيير هنا ✨
+    return pipeline("text-classification", model="TheMohanad1/marbert-arabic-sentiment-analyzer", device=DEVICE)
 
-# --- ✨ إضافة دالة تحميل نموذج اللهجات ✨ ---
 @st.cache_resource
 def load_dialect_model():
-    print(f"⏳ Loading Dialect Model...")
-    return pipeline("text-classification", model="./models/dialect_classifier_final", device=DEVICE)
+    print(f"⏳ Loading Dialect Model from Hugging Face Hub...")
+    # ✨ التغيير هنا ✨
+    return pipeline("text-classification", model="TheMohanad1/marbert-arabic-dialect-classifier", device=DEVICE)
 
 
-# --- 3. دوال التنبؤ (مع إضافة الدالة الجديدة) ---
+# --- 3. دوال التنبؤ (لا تغيير هنا) ---
 def predict_gender(text_list: list) -> list:
     gender_model = load_gender_model()
     batch_size = 32 if DEVICE == 0 else 8
@@ -44,7 +46,6 @@ def predict_sentiment(text_list: list) -> list:
     results = sentiment_model(text_list, batch_size=batch_size, truncation=True, padding=True, top_k=1)
     return [result[0]['label'] for result in results]
 
-# --- ✨ إضافة دالة التنبؤ باللهجة ✨ ---
 def predict_dialect(text_list: list) -> list:
     dialect_model = load_dialect_model()
     batch_size = 32 if DEVICE == 0 else 8
